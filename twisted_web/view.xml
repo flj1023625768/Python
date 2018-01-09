@@ -1,0 +1,24 @@
+<html xmlns:t="http://twistedmatrix.com/ns/twisted.web.template/0.1">
+<head>
+  <meta charset="UTF-8" />
+  <title t:render="title"></title>
+  <style type="text/css" rel="stylesheet">
+	.person {
+	  text-align: center;
+	}
+     .avatar {
+	height: 160px;
+	width: 240px;
+	border:10px solid #DCDCDC;
+	border-radius: 5px;
+ 	}
+  </style>
+</head>
+<body>
+  <div class="person" t:render="person">
+    <img class="avatar"><t:attr name="src"><t:slot name="avatar" /></t:attr></img>
+    <p><t:slot name="nick" /></p>
+  </div>
+</body>
+</html>
+  
