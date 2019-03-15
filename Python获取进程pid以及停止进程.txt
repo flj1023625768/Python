@@ -1,0 +1,73 @@
+简介
+
+在 Python 的项目开发中，程序有时会需要管理（例如停止）其它后台进程。
+
+可以通过 os.getpid() 函数以及 os.system() 来实现这一功能。
+
+示例
+
+在同一个目录下创建 3 个脚本文件：
+
+1 要停止的进程
+
+创建脚本文件 count.py ，内容如下：
+
+
+import time
+import os
+
+# 获取进程的pid
+pid = os.getpid()
+print('pid: ', pid)
+
+# 将pid写入本地文件
+f1 = open(file='count_pid.txt', mode='w')
+f1.write(pid.__str__())
+f1.close()
+
+# 开始计数并打印
+n = 0
+while True:
+    n += 1
+    print(n)
+    time.sleep(1)
+
+
+运行这个脚本，这样就得到了一个在后台持续运行的进程。
+
+2 用来停止进程的函数
+
+创建脚本文件 kill.py ，内容如下：
+
+import os
+
+
+def kill(pid):
+    # 本函数用于中止传入pid所对应的进程
+    if os.name == 'nt':
+        # Windows系统
+        cmd = 'taskkill /pid ' + str(pid) + ' /f'
+        try:
+            os.system(cmd)
+            print(pid, 'killed')
+        except Exception as e:
+            print(e)
+    elif os.name == 'posix':
+        # Linux系统
+        cmd = 'kill ' + str(pid)
+        try:
+            os.system(cmd)
+            print(pid, 'killed')
+        except Exception as e:
+            print(e)
+    else:
+        print('Undefined os.name')
+
+
+其它程序中调用这个脚本中定义的 kill() 函数，即可中止指定进程。
+
+3 控制程序
+
+创建脚本文件 manager.py ，内容如下：
+
+运行这个脚本，就可以读取到 count.py 对应进程的 pid ，并通过它中止该进程。
